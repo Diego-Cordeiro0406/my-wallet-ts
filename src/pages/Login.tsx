@@ -31,12 +31,14 @@ export default function Login() {
     <section>
       <form action="">
         <input
+          data-testid="email-input"
           type="text"
           name="email"
           value={loginData.email}
           onChange={ handleInputChange }
         />
         <input
+          data-testid="password-input"
           type="password"
           name="password"
           value={loginData.password }

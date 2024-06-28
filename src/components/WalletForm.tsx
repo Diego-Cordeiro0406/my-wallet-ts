@@ -1,30 +1,23 @@
 import { v4 as uuidv4 } from 'uuid';
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Expense, ExpenseWithoutId } from "../types/types";
 
-export default function WalletForm() {
-  const [currencies, setCurrencies] = useState<string[]>([])
+type WalletFormProps = {
+  addExpense: (expense: Expense) => void;
+};
+
+export default function WalletForm({ addExpense }: WalletFormProps) {
   const [expenseForm, setExpenseForm] = useState<ExpenseWithoutId>({
     value: '',
-    currency: 'USD',
     payment: 'Dinheiro',
     category: 'Alimentação',
     description: ''
   })
-  const [expenses, setExpenses] = useState<Expense[]>(() => {
-    const savedExpenses = localStorage.getItem('expenses');
-    return savedExpenses ? JSON.parse(savedExpenses) : [];
-  });
-  
-  useEffect(() => {
-    const fetchCurrencies = async() => {
-      const response = await fetch('https://economia.awesomeapi.com.br/json/all')
-      const jsonData = await response.json()
-      const formatedData = Object.keys(jsonData).filter((e) => e !== 'USDT')
-      setCurrencies(formatedData)
-    }
-    fetchCurrencies()
-  }, [])
+  // const [expenses, setExpenses] = useState<Expense[]>(() => {
+  //   const savedExpenses = localStorage.getItem('expenses');
+  //   return savedExpenses ? JSON.parse(savedExpenses) : [];
+  // });
+
 
   const handleInputChange = (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -38,12 +31,11 @@ export default function WalletForm() {
     event.preventDefault();
     const id = uuidv4(); // Gera um ID único
     const expenseToAdd = { ...expenseForm, id };
-    const newExpenses = [...expenses, expenseToAdd];
-    setExpenses(newExpenses);
-    localStorage.setItem('expenses', JSON.stringify(newExpenses));
+    // const newExpense = [...expenses, expenseToAdd];
+    // setExpenses(newExpense);
+    addExpense(expenseToAdd);
     setExpenseForm({
       value: '',
-      currency: 'USD',
       payment: 'Dinheiro',
       category: 'Alimentação',
       description: ''
@@ -63,23 +55,6 @@ export default function WalletForm() {
             onChange={ handleInputChange }
           />
         </label>
-        
-        <label>
-          Moeda:
-          <select
-            data-testid="currency-input"
-            name="currency"
-            id="currencies-select"
-            value={expenseForm.currency}
-            onChange={ handleInputChange }
-          >
-            {
-              currencies.map((currencie) => (
-                <option key={currencie} value={currencie}>{currencie}</option>
-              ))
-            }
-        </select>
-      </label>
         
         <label>
           Método de pagamento:

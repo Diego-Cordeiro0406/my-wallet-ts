@@ -6,7 +6,6 @@ export type LoginType = {
 export type Expense = {
   id: string
   value: string
-  currency: string
   payment: string
   category: string
   description: string

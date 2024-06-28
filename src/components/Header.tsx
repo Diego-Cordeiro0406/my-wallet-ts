@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react"
 import { Expense } from "../types/types"
+import { useNavigate } from "react-router-dom"
 
 export default function Header() {
+  const navigate = useNavigate()
   const [emailField, setEmailField] = useState<string>('')
   const [total, setTotal] = useState('')
   const emailData = localStorage.getItem('data')
@@ -17,17 +19,21 @@ export default function Header() {
       }, 0);
       setTotal(totalExpenses)
     }
-  }, [emailData, expenses])
+    if (!emailData) navigate('/login')
+  }, [emailData, expenses, navigate])
   return (
     <section>
       <main>
         <section>
           <div>
-            <label htmlFor="email-field">Email</label>
-            <p id="email-field" data-testid="email-field">{emailField}</p>
+            <label>
+              Email
+              <p id="email-field" data-testid="email-field">{emailField}</p>
+            </label>
           </div>
+
           <div>
-            <p data-testid="total-field">{`Total de despesas: R$ ${total}`}</p>
+            <p data-testid="total-field">{`Total de despesas: R$ ${expenses ? total : 0}`}</p>
             <p data-testid="header-currency-field">BRL</p>
           </div>
         </section>

@@ -1,23 +1,31 @@
 import { v4 as uuidv4 } from 'uuid';
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { Expense, ExpenseWithoutId } from "../types/types";
 
 type WalletFormProps = {
   addExpense: (expense: Expense) => void;
+  updateExpense: (expense: Expense) => void;
+  editingExpense: Expense | null;
 };
 
-export default function WalletForm({ addExpense }: WalletFormProps) {
+export default function WalletForm({ addExpense, updateExpense, editingExpense  }: WalletFormProps) {
   const [expenseForm, setExpenseForm] = useState<ExpenseWithoutId>({
     value: '',
     payment: 'Dinheiro',
     category: 'Alimentação',
     description: ''
   })
-  // const [expenses, setExpenses] = useState<Expense[]>(() => {
-  //   const savedExpenses = localStorage.getItem('expenses');
-  //   return savedExpenses ? JSON.parse(savedExpenses) : [];
-  // });
 
+  useEffect(() => {
+    if (editingExpense) {
+      setExpenseForm({
+        description: editingExpense.description,
+        category: editingExpense.category,
+        payment: editingExpense.payment,
+        value: editingExpense.value.toString(),
+      })
+    }
+  }, [editingExpense]);
 
   const handleInputChange = (event: React.ChangeEvent<HTMLSelectElement | HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -30,10 +38,19 @@ export default function WalletForm({ addExpense }: WalletFormProps) {
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const id = uuidv4(); // Gera um ID único
-    const expenseToAdd = { ...expenseForm, id };
-    // const newExpense = [...expenses, expenseToAdd];
-    // setExpenses(newExpense);
-    addExpense(expenseToAdd);
+
+    const expense: Expense = {
+      id: editingExpense ? editingExpense.id : id,
+      description: expenseForm.description,
+      category: expenseForm.category,
+      payment: expenseForm.payment,
+      value: expenseForm.value,
+    };
+    if (editingExpense) {
+      updateExpense(expense)
+    } else {
+      addExpense(expense);
+    }
     setExpenseForm({
       value: '',
       payment: 'Dinheiro',
@@ -41,13 +58,16 @@ export default function WalletForm({ addExpense }: WalletFormProps) {
       description: ''
     });
   };
+
   return (
     <section>
       <form onSubmit={handleSubmit}>
         <label>
           Valor:
           <input
+            required
             data-testid="value-input"
+            placeholder="ex. 90"
             id="value-input"
             name="value"
             type="number"
@@ -92,7 +112,9 @@ export default function WalletForm({ addExpense }: WalletFormProps) {
         <label>
           Descrição:
           <input
+            required
             data-testid="description-input"
+            placeholder="ex. conta de internet"
             id="description-input"
             name="description"
             type="text"
@@ -101,7 +123,7 @@ export default function WalletForm({ addExpense }: WalletFormProps) {
           />
         </label>
         
-        <button type="submit">Adicionar despesa</button>
+        <button type="submit">{editingExpense ? 'Atualizar Despesa' : 'Adicionar Despesa'}</button>
       </form>
     </section>
   )

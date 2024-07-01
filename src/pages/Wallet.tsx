@@ -4,7 +4,9 @@ import WalletForm from "../components/WalletForm"
 import { Expense } from "../types/types"
 
 export default function Wallet() {
-  const [expensesData, setExpenses] = useState<Expense[]>([])
+  const [expensesData, setExpenses] = useState<Expense[]>([]);
+  const [editingExpense, setEditingExpense] = useState<Expense | null>(null);
+
   useEffect(() => {
     const expenses = localStorage.getItem('expenses')
     if (expenses) {
@@ -19,10 +21,34 @@ export default function Wallet() {
     localStorage.setItem('expenses', JSON.stringify(updatedExpenses));
   };
 
+  const removeExpense = (id: string) => {
+    const updatedExpenses = expensesData.filter((expense) => expense.id !== id)
+    setExpenses(updatedExpenses)
+    localStorage.setItem('expenses', JSON.stringify(updatedExpenses));
+  }
+
+  const updateExpense = (updatedExpense: Expense) => {
+    const updatedExpenses = expensesData.map((expense) =>
+      expense.id === updatedExpense.id ? updatedExpense : expense
+    );
+    setExpenses(updatedExpenses);
+    localStorage.setItem('expenses', JSON.stringify(updatedExpenses));
+    setEditingExpense(null); // Resetar o estado de edição
+  };
+
+  // Função para iniciar a edição de uma despesa
+  const startEditing = (expense: Expense) => {
+    setEditingExpense(expense);
+  };
+
   return (
     <>
       <Header />
-      <WalletForm addExpense={addExpense} />
+      <WalletForm
+        addExpense={addExpense}
+        updateExpense={updateExpense}
+        editingExpense={editingExpense}
+      />
       <section>
       <table className="table-container">
         <thead>
@@ -40,11 +66,21 @@ export default function Wallet() {
             <td>{e.description}</td>
             <td>{e.category}</td>
             <td>{e.payment}</td>
-            <td>{Number(e.value)}</td>
+            <td>{Number(e.value).toFixed(2)}</td>
             <td>Real</td>
             <td>
-              <button>Editar</button>
-              <button>Excluir</button>
+              <button
+                data-testid="delete-btn"
+                onClick={() => startEditing(e) }
+              >
+                Editar
+              </button>
+              <button
+                data-testid="edit-btn"
+                onClick={() => removeExpense(e.id) }
+              >
+                Excluir
+              </button>
             </td>
           </tr>
         ))}

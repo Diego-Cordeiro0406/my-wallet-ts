@@ -33,7 +33,11 @@ export default function Header() {
           </div>
 
           <div>
-            <p data-testid="total-field">{`Total de despesas: R$ ${expenses ? total : 0}`}</p>
+            <p
+              data-testid="total-field"
+            >
+              {`Total de despesas: R$ ${expenses ? Number(total).toFixed(2) : 0}`}
+            </p>
             <p data-testid="header-currency-field">BRL</p>
           </div>
         </section>

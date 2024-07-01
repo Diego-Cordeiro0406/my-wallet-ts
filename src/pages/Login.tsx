@@ -17,7 +17,7 @@ export default function Login() {
     }));
   };
 
-  const handleClick = () => {
+  const handleLogin = () => {
     const storage = localStorage.getItem('data')
     if (storage) {
       navigate('/wallet')
@@ -26,23 +26,30 @@ export default function Login() {
       navigate('/wallet')
     }
   }
-
+  const valLogin = loginData.email.endsWith('.com') && loginData.password.length > 5
   return (
-    <section>
-      <form action="">
+    <section >
+      <form onSubmit={ handleLogin }>
         <input
+          required
+          data-testid="email-input"
+          placeholder="E-mail"
           type="text"
           name="email"
           value={loginData.email}
           onChange={ handleInputChange }
         />
+        {/* <p>Ex . Joaozinho@email.com</p> */}
         <input
+          required
+          data-testid="password-input"
+          placeholder="Senha"
           type="password"
           name="password"
           value={loginData.password }
           onChange={ handleInputChange }
         />
-        <button onClick={ handleClick }>Entrar</button>
+        <button disabled={!valLogin} type="submit">Entrar</button>
       </form>
     </section>
   )

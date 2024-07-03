@@ -42,13 +42,27 @@ export default function Wallet() {
   };
 
   return (
-    <>
-      <Header />
-      <WalletForm
-        addExpense={addExpense}
-        updateExpense={updateExpense}
-        editingExpense={editingExpense}
-      />
+    <section
+      className="
+        w-screen
+        h-screen
+        flex
+        flex-col
+        items-center
+        bg-app-background
+        bg-cover
+        bg-center
+
+      "
+    >
+      <section className="w-4/5 h-[30.125rem] bg-white rounded-xl">
+        <Header />
+        <WalletForm
+          addExpense={ addExpense }
+          updateExpense={ updateExpense }
+          editingExpense={editingExpense}
+        />
+      </section>
       <section>
       <table className="table-container">
         <thead>
@@ -88,6 +102,6 @@ export default function Wallet() {
         
       </table>
       </section>
-    </>
+    </section>
   )
 }

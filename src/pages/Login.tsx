@@ -37,7 +37,7 @@ export default function Login() {
         justify-center
         bg-cover
         bg-center
-        bg-login-background
+        bg-app-background
         w-screen
         h-screen
       "

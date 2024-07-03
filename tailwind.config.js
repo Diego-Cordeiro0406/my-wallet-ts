@@ -7,7 +7,7 @@ export default {
   theme: {
     extend: {
       backgroundImage: {
-        "login-background": "url(src/assets/foto_fundo.png), linear-gradient(to right, rgb(47,193,140), rgb(47,193,140))",
+        "app-background": "url(src/assets/foto_fundo.png), linear-gradient(to right, rgb(47,193,140), rgb(47,193,140))",
       },
     },
     screens: {

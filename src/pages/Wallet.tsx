@@ -52,10 +52,9 @@ export default function Wallet() {
         bg-app-background
         bg-cover
         bg-center
-
       "
     >
-      <section className="w-4/5 h-[30.125rem] bg-white rounded-xl">
+      <section className="w-4/5 h-[30.125rem] bg-white rounded-xl z-40">
         <Header />
         <WalletForm
           addExpense={ addExpense }
@@ -63,44 +62,56 @@ export default function Wallet() {
           editingExpense={editingExpense}
         />
       </section>
-      <section>
-      <table className="table-container">
-        <thead>
-          <tr>
-            <th>Descrição</th>
-            <th>Tag</th>
-            <th>Método de pagamento</th>
-            <th>Valor</th>
-            <th>Editar/Excluir</th>
-          </tr>
-        </thead>
-        <tbody>
-          {expensesData.map((e) => (
-          <tr key={ e.id }>
-            <td>{e.description}</td>
-            <td>{e.category}</td>
-            <td>{e.payment}</td>
-            <td>{Number(e.value).toFixed(2)}</td>
-            <td>Real</td>
-            <td>
-              <button
-                data-testid="delete-btn"
-                onClick={() => startEditing(e) }
-              >
-                Editar
-              </button>
-              <button
-                data-testid="edit-btn"
-                onClick={() => removeExpense(e.id) }
-              >
-                Excluir
-              </button>
-            </td>
-          </tr>
-        ))}
-        </tbody>
-        
-      </table>
+      <section
+        className="
+          flex
+          w-11/12
+          h-[29rem]
+          bg-[#003BE5]
+          justify-center
+          items-center
+          absolute
+          z-10
+          bottom-40
+          rounded-xl
+        "
+      >
+        <table className="table-container mt-5">
+          <thead>
+            <tr>
+              <th>Descrição</th>
+              <th>Tag</th>
+              <th>Método de pagamento</th>
+              <th>Valor</th>
+              <th>Editar/Excluir</th>
+            </tr>
+          </thead>
+          <tbody>
+            {expensesData.map((e) => (
+            <tr key={ e.id }>
+              <td>{e.description}</td>
+              <td>{e.category}</td>
+              <td>{e.payment}</td>
+              <td>{Number(e.value).toFixed(2)}</td>
+              <td>Real</td>
+              <td>
+                <button
+                  data-testid="delete-btn"
+                  onClick={() => startEditing(e) }
+                >
+                  Editar
+                </button>
+                <button
+                  data-testid="edit-btn"
+                  onClick={() => removeExpense(e.id) }
+                >
+                  Excluir
+                </button>
+              </td>
+            </tr>
+          ))}
+          </tbody>
+        </table>
       </section>
     </section>
   )

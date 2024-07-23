@@ -12,6 +12,7 @@ export default function Header() {
   const [total, setTotal] = useState('')
   const emailData = localStorage.getItem('data')
   const expenses = localStorage.getItem('expenses')
+  console.log(typeof(emailData))
 
   useEffect(() => {
     if(emailData && expenses) {

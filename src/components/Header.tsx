@@ -12,7 +12,6 @@ export default function Header() {
   const [total, setTotal] = useState('')
   const emailData = localStorage.getItem('data')
   const expenses = localStorage.getItem('expenses')
-  console.log(typeof(emailData))
 
   useEffect(() => {
     if(emailData && expenses) {
@@ -26,6 +25,7 @@ export default function Header() {
     }
     if (!emailData) navigate('/login')
   }, [emailData, expenses, navigate])
+
   return (
     <section className="flex items-center justify-evenly w-full bg-white h-1/2">
         <div className="flex items-center h-[3.75rem]">
